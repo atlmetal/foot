@@ -1,0 +1,32 @@
+<%= form_with(model: club) do |form| %>
+  <% if club.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(club.errors.count, "error") %> prohibited this club from being saved:</h2>
+
+      <ul>
+        <% club.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_area :name %>
+  </div>
+
+  <div>
+    <%= form.label :foundation_date, style: "display: block" %>
+    <%= form.date_field :foundation_date %>
+  </div>
+
+  <div>
+    <%= form.label :federation_id, style: "display: block" %>
+    <%= form.text_field :federation_id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

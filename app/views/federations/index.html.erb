@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Federations</h1>
+
+<div id="federations">
+  <% @federations.each do |federation| %>
+    <%= render federation %>
+    <p>
+      <%= link_to "Show this federation", federation %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New federation", new_federation_path %>

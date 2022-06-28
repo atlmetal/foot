@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @federation %>
+
+<div>
+  <%= link_to "Edit this federation", edit_federation_path(@federation) %> |
+  <%= link_to "Back to federations", federations_path %>
+
+  <%= button_to "Destroy this federation", @federation, method: :delete %>
+</div>
