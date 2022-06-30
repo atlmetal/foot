@@ -1,14 +1,40 @@
-<p style="color: green"><%= notice %></p>
+<p id="notice"><%= notice %></p>
 
 <h1>Clubs</h1>
+<table id='ordersTable' class='table table-striped table-sm'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Foundation date</th>
+      <th>Federation</th>
+    </tr>
+  </thead>
 
-<div id="clubs">
-  <% @clubs.each do |club| %>
-    <%= render club %>
-    <p>
-      <%= link_to "Show this club", club %>
-    </p>
-  <% end %>
-</div>
+<%# <div id="clubs"> %>
+  <%# <% @clubs.each do |club| %>
+    <%# <%= render club %>
+    <%# <p> %>
+      <%# <%= link_to "Show this club", club %>
+    <%# </p> %>
+  <%# <% end %>
+<%# </div> %>
 
-<%= link_to "New club", new_club_path %>
+<%# <%= link_to "New club", new_club_path %>
+
+  <tbody>
+    <% @clubs.each do |club| %>
+      <tr>
+        <td><%= club.name %></td>
+        <td><%= club.foundation_date %></td>
+        <td><%= club.federation.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%# <script src="https://code.jquery.com/jquery-3.3.1.js"></script> %>
+<script>
+  $(document).ready(function() {
+    var oTable = $("#ordersTable").DataTable({})
+  });
+</script>
