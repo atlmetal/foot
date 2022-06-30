@@ -71,3 +71,5 @@ end
 gem "jquery-rails", "~> 4.5"
 
 gem "jquery-datatables", "~> 1.10"
+
+gem "faker", "~> 2.21"
