@@ -57,7 +57,6 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  gem "rspec-rails"
 
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
@@ -67,11 +66,16 @@ group :development do
   # gem "spring"
 end
 
+group :test do
+  gem "factory_bot_rails"
+  gem "shoulda-matchers"
+  gem "faker", "~> 2.21"
+  gem "database_cleaner"
+end
+
 
 gem "jquery-rails", "~> 4.5"
 
 gem "jquery-datatables", "~> 1.10"
-
-gem "faker", "~> 2.21"
 
 gem "bootstrap", "~> 4.1"
