@@ -8,7 +8,7 @@ RSpec.describe "clubs/show", type: :view do
     ))
   end
 
-  it "renders attributes in <p>" do
+  xit "renders attributes in <p>" do
     render
     expect(rendered).to match(/MyText/)
     expect(rendered).to match(//)

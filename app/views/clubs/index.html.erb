@@ -7,6 +7,9 @@
       <th>Name</th>
       <th>Foundation date</th>
       <th>Federation</th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -27,10 +30,15 @@
         <td><%= club.name %></td>
         <td><%= club.foundation_date %></td>
         <td><%= club.federation.name %></td>
+        <td><%= link_to 'Show', club %></td>
+        <td><%= link_to 'Edit', edit_club_path(club) %></td>
+        <td><%= link_to 'Destroy', club, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<%= link_to 'New club', new_club_path %>
 
 <%# <script src="https://code.jquery.com/jquery-3.3.1.js"></script> %>
 <script>
