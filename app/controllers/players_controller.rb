@@ -4,10 +4,13 @@ class PlayersController < ApplicationController
   # GET /players or /players.json
   def index
     @players = Player.all
+    render json: @players, status: :ok
   end
 
   # GET /players/1 or /players/1.json
   def show
+    @player = Player.find(params[:id])
+    render json: @player, status: :ok
   end
 
   # GET /players/new
