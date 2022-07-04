@@ -4,10 +4,13 @@ class ClubsController < ApplicationController
   # GET /clubs or /clubs.json
   def index
     @clubs = Club.all
+    render json: @clubs, status: :ok
   end
 
   # GET /clubs/1 or /clubs/1.json
   def show
+    @club = Club.find(params[:id])
+    render json: @club, status: :ok
   end
 
   # GET /clubs/new
