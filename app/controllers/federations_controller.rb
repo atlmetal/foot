@@ -4,10 +4,13 @@ class FederationsController < ApplicationController
   # GET /federations or /federations.json
   def index
     @federations = Federation.all
+    render json: @federations, status: :ok
   end
 
   # GET /federations/1 or /federations/1.json
   def show
+    @federation = Federation.find(params[:id])
+    render json: @federation, status: :ok
   end
 
   # GET /federations/new
