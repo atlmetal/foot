@@ -168,31 +168,31 @@ RSpec.describe "Clubs endpoint", type: :request do
 
     it 'creates a club' do
       req_payload = {
-        post: {
-          name: 'Elver Dolaga',
-          foundation_date: '01-01-1990',
+        club: {
+          name: Faker::Name.name,
+          foundation_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
           federation_id: federation.id
         }
       }
 
       #POST HPPT
-      post "/posts", params: req_payload
+      post "/clubs", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload["id"]).to_not be_empty
+      expect(payload["id"]).to_not be_nil
       expect(response).to have_http_status(:created)
     end
 
-    it 'returns an error trying to create a  club' do
+    it 'returns an error trying to create a  player' do
       req_payload = {
-        post: {
-          birth_date: '01-01-1990',
-          club_id: club.id
+        club: {
+          foundation_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
+          federation_id: federation.id
         }
       }
 
       #POST HPPT
-      post "/posts", params: req_payload
+      post "/clubs", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload["error"]).to_not be_empty
@@ -202,38 +202,38 @@ RSpec.describe "Clubs endpoint", type: :request do
 
   #puts
   describe "PUT /clubs/{id}" do
-    let!(:club) { create(:club) }
+    let!(:gamer) { create(:club) }
 
     it 'creates a club' do
       req_payload = {
-        post: {
+        club: {
           name: Faker::Name.name,
           foundation_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
         }
       }
 
       #PUT HPPT
-      put "/posts/#{ club.id }", params: req_payload
+      put "/clubs/#{gamer.id}", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload["id"]).to eq(club.id)
+      expect(payload["id"]).to eq(gamer.id)
       expect(response).to have_http_status(:ok)
     end
-  end
 
-  it 'returns an error trying to create a  club' do
-    req_payload = {
-      post: {
-        name: nil,
-        foundation_date: nil,
+    it 'returns an error trying to create a  player' do
+      req_payload = {
+        club: {
+          name: nil,
+          foundation_date: nil
+        }
       }
-    }
 
-    #PUT HPPT
-    put "/posts/#{ club.id }", params: req_payload
-    payload = JSON.parse(response.body)
-    expect(payload).to_not be_empty
-    expect(payload["error"]).to_not be_empty
-    expect(response).to have_http_status(:unprocessable_entity)
+      #PUT HPPT
+      put "/clubs/#{gamer.id}", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["error"]).to_not be_empty
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 end

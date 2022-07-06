@@ -1,4 +1,13 @@
 class FederationsController < ApplicationController
+
+  rescue_from Exception do |e|
+    render json: { error: e.message }, status: :internal_error
+  end
+
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   before_action :set_federation, only: %i[ show edit update destroy ]
 
   # GET /federations or /federations.json
@@ -23,31 +32,42 @@ class FederationsController < ApplicationController
   end
 
   # POST /federations or /federations.json
-  def create
-    @federation = Federation.new(federation_params)
+  # def create
+  #   @federation = Federation.new(federation_params)
 
-    respond_to do |format|
-      if @federation.save
-        format.html { redirect_to federation_url(@federation), notice: "Federation was successfully created." }
-        format.json { render :show, status: :created, location: @federation }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @federation.errors, status: :unprocessable_entity }
-      end
-    end
+  #   respond_to do |format|
+  #     if @federation.save
+  #       format.html { redirect_to federation_url(@federation), notice: "Federation was successfully created." }
+  #       format.json { render :show, status: :created, location: @federation }
+  #     else
+  #       format.html { render :new, status: :unprocessable_entity }
+  #       format.json { render json: @federation.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
+  def create
+    @federation = Federation.create!(create_params)
+    render json: @federation, status: :created
   end
 
   # PATCH/PUT /federations/1 or /federations/1.json
+  # def update
+  #   respond_to do |format|
+  #     if @federation.update(federation_params)
+  #       format.html { redirect_to federation_url(@federation), notice: "Federation was successfully updated." }
+  #       format.json { render :show, status: :ok, location: @federation }
+  #     else
+  #       format.html { render :edit, status: :unprocessable_entity }
+  #       format.json { render json: @federation.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
   def update
-    respond_to do |format|
-      if @federation.update(federation_params)
-        format.html { redirect_to federation_url(@federation), notice: "Federation was successfully updated." }
-        format.json { render :show, status: :ok, location: @federation }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @federation.errors, status: :unprocessable_entity }
-      end
-    end
+    @federation = Federation.find(params[:id])
+    @federation.update!(update_params)
+    render json: @federation, status: :ok
   end
 
   # DELETE /federations/1 or /federations/1.json
@@ -66,8 +86,12 @@ class FederationsController < ApplicationController
       @federation = Federation.find(params[:id])
     end
 
+    def create_params
+      params.require(:federation).permit(:name, :foundation_date)
+    end
+
     # Only allow a list of trusted parameters through.
-    def federation_params
+    def update_params
       params.require(:federation).permit(:name, :foundation_date)
     end
 end

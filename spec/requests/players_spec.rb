@@ -169,33 +169,33 @@ RSpec.describe "Player endopoint", type: :request do
 
     it 'creates a player' do
       req_payload = {
-        post: {
-          name: 'Pepe Calavera',
-          birth_date: '01-01-1990',
-          value: 10000,
+        player: {
+          name: Faker::Name.name,
+          birth_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
+          value: Faker::Commerce.price(range: 100000..90000000),
           club_id: club.id
         }
       }
 
       #POST HPPT
-      post "/posts", params: req_payload
+      post "/players", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload["id"]).to_not be_empty
+      expect(payload["id"]).to_not be_nil
       expect(response).to have_http_status(:created)
     end
 
     it 'returns an error trying to create a  player' do
       req_payload = {
-        post: {
-          birth_date: '01-01-1990',
-          value: 10000,
+        player: {
+          birth_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
+          value: Faker::Commerce.price(range: 100000..90000000),
           club_id: club.id
         }
       }
 
       #POST HPPT
-      post "/posts", params: req_payload
+      post "/players", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload["error"]).to_not be_empty
@@ -205,11 +205,11 @@ RSpec.describe "Player endopoint", type: :request do
 
   #puts
   describe "PUT /players/{id}" do
-    let!(:player) { create(:player) }
+    let!(:gamer) { create(:player) }
 
     it 'creates a player' do
       req_payload = {
-        post: {
+        player: {
           name: Faker::Name.name,
           birth_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
           value: Faker::Commerce.price(range: 100000..90000000),
@@ -217,28 +217,28 @@ RSpec.describe "Player endopoint", type: :request do
       }
 
       #PUT HPPT
-      put "/posts/#{ player.id }", params: req_payload
+      put "/players/#{gamer.id}", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload["id"]).to eq(player.id)
+      expect(payload["id"]).to eq(gamer.id)
       expect(response).to have_http_status(:ok)
     end
-  end
 
-  it 'returns an error trying to create a  player' do
-    req_payload = {
-      post: {
-        name: nil,
-        birth_date: nil,
-        value: 10000,
+    it 'returns an error trying to create a  player' do
+      req_payload = {
+        player: {
+          name: nil,
+          birth_date: nil,
+          value: Faker::Commerce.price(range: 100000..90000000),
+        }
       }
-    }
 
-    #PUT HPPT
-    put "/posts/#{ player.id }", params: req_payload
-    payload = JSON.parse(response.body)
-    expect(payload).to_not be_empty
-    expect(payload["error"]).to_not be_empty
-    expect(response).to have_http_status(:unprocessable_entity)
+      #PUT HPPT
+      put "/players/#{gamer.id}", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["error"]).to_not be_empty
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 end

@@ -1,4 +1,13 @@
 class ClubsController < ApplicationController
+
+  rescue_from Exception do |e|
+    render json: { error: e.message }, status: :internal_error
+  end
+
+  rescue_from ActiveRecord::RecordInvalid do |e|
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   before_action :set_club, only: %i[ show edit update destroy ]
 
   # GET /clubs or /clubs.json
@@ -23,31 +32,42 @@ class ClubsController < ApplicationController
   end
 
   # POST /clubs or /clubs.json
-  def create
-    @club = Club.new(club_params)
+  # def create
+  #   @club = Club.new(club_params)
 
-    respond_to do |format|
-      if @club.save
-        format.html { redirect_to club_url(@club), notice: "Club was successfully created." }
-        format.json { render :show, status: :created, location: @club }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @club.errors, status: :unprocessable_entity }
-      end
-    end
+  #   respond_to do |format|
+  #     if @club.save
+  #       format.html { redirect_to club_url(@club), notice: "Club was successfully created." }
+  #       format.json { render :show, status: :created, location: @club }
+  #     else
+  #       format.html { render :new, status: :unprocessable_entity }
+  #       format.json { render json: @club.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
+  def create
+    @club = Club.create!(create_params)
+    render json: @club, status: :created
   end
 
   # PATCH/PUT /clubs/1 or /clubs/1.json
+  # def update
+  #   respond_to do |format|
+  #     if @club.update(club_params)
+  #       format.html { redirect_to club_url(@club), notice: "Club was successfully updated." }
+  #       format.json { render :show, status: :ok, location: @club }
+  #     else
+  #       format.html { render :edit, status: :unprocessable_entity }
+  #       format.json { render json: @club.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
+
   def update
-    respond_to do |format|
-      if @club.update(club_params)
-        format.html { redirect_to club_url(@club), notice: "Club was successfully updated." }
-        format.json { render :show, status: :ok, location: @club }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @club.errors, status: :unprocessable_entity }
-      end
-    end
+    @club = Club.find(params[:id])
+    @club.update!(update_params)
+    render json: @club, status: :ok
   end
 
   # DELETE /clubs/1 or /clubs/1.json
@@ -67,7 +87,11 @@ class ClubsController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def club_params
+    def create_params
       params.require(:club).permit(:name, :foundation_date, :federation_id)
+    end
+
+    def update_params
+      params.require(:club).permit(:name, :foundation_date)
     end
 end

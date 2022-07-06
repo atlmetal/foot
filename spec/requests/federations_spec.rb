@@ -165,31 +165,31 @@ RSpec.describe "Federations endpoint", type: :request do
   end
 
   describe "POST /federations" do
-
     it 'creates a federation' do
       req_payload = {
-        post: {
-          name: 'Dima ratas',
-          birth_date: '01-01-1990',
+        federation: {
+          name: Faker::Name.name,
+          foundation_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01')
         }
       }
 
       #POST HPPT
-      post "/posts", params: req_payload
+      post "/federations", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
+      expect(payload["id"]).to_not be_nil
       expect(response).to have_http_status(:created)
     end
 
     it 'returns an error trying to create a federation' do
       req_payload = {
-        post: {
-          foundation_date: '01-01-1990',
+        federation: {
+          foundation_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01')
         }
       }
 
       #POST HPPT
-      post "/posts", params: req_payload
+      post "/federations", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload["error"]).to_not be_empty
@@ -199,38 +199,38 @@ RSpec.describe "Federations endpoint", type: :request do
 
   #puts
   describe "PUT /federations/{id}" do
-    let!(:federation) { create(:federation) }
+    let!(:gamer) { create(:federation) }
 
     it 'creates a federation' do
       req_payload = {
-        post: {
+        federation: {
           name: Faker::Name.name,
           foundation_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
         }
       }
 
       #PUT HPPT
-      put "/posts/#{ federation.id }", params: req_payload
+      put "/federations/#{gamer.id}", params: req_payload
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload["id"]).to eq(federation.id)
+      expect(payload["id"]).to eq(gamer.id)
       expect(response).to have_http_status(:ok)
     end
-  end
 
-  it 'returns an error trying to create a federation' do
-    req_payload = {
-      post: {
-        name: nil,
-        foundation_date: nil,
+    it 'returns an error trying to create a federation' do
+      req_payload = {
+        federation: {
+          name: 'nil',
+          foundation_date: nil
+        }
       }
-    }
 
-    #PUT HPPT
-    put "/posts/#{ federation.id }", params: req_payload
-    payload = JSON.parse(response.body)
-    expect(payload).to_not be_empty
-    expect(payload["error"]).to_not be_empty
-    expect(response).to have_http_status(:unprocessable_entity)
+      #PUT HPPT
+      put "/federations/#{gamer.id}", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["error"]).to_not be_empty
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
   end
 end
