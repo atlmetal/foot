@@ -162,4 +162,78 @@ RSpec.describe "Clubs endpoint", type: :request do
       expect(response).to have_http_status(200)
     end
   end
+
+  describe "POST /clubs" do
+    let!(:federation) { create(:federation) }
+
+    it 'creates a club' do
+      req_payload = {
+        post: {
+          name: 'Elver Dolaga',
+          foundation_date: '01-01-1990',
+          federation_id: federation.id
+        }
+      }
+
+      #POST HPPT
+      post "/posts", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["id"]).to_not be_empty
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'returns an error trying to create a  club' do
+      req_payload = {
+        post: {
+          birth_date: '01-01-1990',
+          club_id: club.id
+        }
+      }
+
+      #POST HPPT
+      post "/posts", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["error"]).to_not be_empty
+      expect(response).to have_http_status(:unprocessable_entity)
+    end
+  end
+
+  #puts
+  describe "PUT /clubs/{id}" do
+    let!(:club) { create(:club) }
+
+    it 'creates a club' do
+      req_payload = {
+        post: {
+          name: Faker::Name.name,
+          foundation_date: Faker::Date.between(from: '1986-01-01', to: '2002-01-01'),
+        }
+      }
+
+      #PUT HPPT
+      put "/posts/#{ club.id }", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["id"]).to eq(club.id)
+      expect(response).to have_http_status(:ok)
+    end
+  end
+
+  it 'returns an error trying to create a  club' do
+    req_payload = {
+      post: {
+        name: nil,
+        foundation_date: nil,
+      }
+    }
+
+    #PUT HPPT
+    put "/posts/#{ club.id }", params: req_payload
+    payload = JSON.parse(response.body)
+    expect(payload).to_not be_empty
+    expect(payload["error"]).to_not be_empty
+    expect(response).to have_http_status(:unprocessable_entity)
+  end
 end
