@@ -131,13 +131,27 @@ require 'rails_helper'
 # end
 
 RSpec.describe "Player endopoint", type: :request do
-  describe "GET /player" do
-    before { get '/players' }
-
+  describe "GET /players" do
     it "returns OK" do
+      get '/players'
       payload = JSON.parse(response.body)
       expect(payload).to be_empty
       expect(response).to have_http_status(200)
+    end
+
+    describe 'Search' do
+      let!(:player1) { create(:player, name: 'Hola 1') }
+      let!(:player2) { create(:player, name: 'Hola 2') }
+      let!(:player3) { create(:player, name: 'jogo 3') }
+
+      it 'filters players by name' do
+        get "/players?search=Hola"
+        payload = JSON.parse(response.body)
+        expect(payload).to_not be_empty
+        expect(payload.size).to eq(2)
+        expect(payload.map { |p| p["id"] }.sort).to eq([player1.id, player2.id].sort)
+        expect(response).to have_http_status(200)
+      end
     end
   end
 

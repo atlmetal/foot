@@ -13,6 +13,9 @@ class FederationsController < ApplicationController
   # GET /federations or /federations.json
   def index
     @federations = Federation.all
+    if !params[:search].nil? && params[:search].present?
+      @federations = FederationsSearchService.search(@federations, params[:search])
+    end
     render json: @federations, status: :ok
   end
 

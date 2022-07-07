@@ -131,12 +131,26 @@ require 'rails_helper'
 # end
 RSpec.describe "Clubs endpoint", type: :request do
   describe "Get /club" do
-    before { get '/clubs' }
-
     it "returns OK" do
+      get '/clubs'
       payload = JSON.parse(response.body)
       expect(payload).to be_empty
       expect(response).to have_http_status(200)
+    end
+
+    describe 'Search' do
+      let!(:club1) { create(:club, name: 'Hola 1') }
+      let!(:club2) { create(:club, name: 'Hola 2') }
+      let!(:club3) { create(:club, name: 'Squadra 3') }
+
+      it 'filters clubs by name' do
+        get "/clubs?search=Hola"
+        payload = JSON.parse(response.body)
+        expect(payload).to_not be_empty
+        expect(payload.size).to eq(2)
+        expect(payload.map { |p| p["id"] }.sort).to eq([club1.id, club2.id].sort)
+        expect(response).to have_http_status(200)
+      end
     end
   end
 

@@ -13,6 +13,9 @@ class ClubsController < ApplicationController
   # GET /clubs or /clubs.json
   def index
     @clubs = Club.all
+    if !params[:search].nil? && params[:search].present?
+      @clubs = ClubsSearchService.search(@clubs, params[:search])
+    end
     render json: @clubs, status: :ok
   end
 

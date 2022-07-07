@@ -132,12 +132,26 @@ require 'rails_helper'
 
 RSpec.describe "Federations endpoint", type: :request do
   describe "Get /federation" do
-    before { get '/federations' }
-
     it 'returns OK' do
+      get '/federations'
       payload = JSON.parse(response.body)
       expect(payload).to be_empty
       expect(response).to have_http_status(200)
+    end
+
+    describe 'Search' do
+      let!(:federation1) { create(:federation, name: 'Hola 1') }
+      let!(:federation2) { create(:federation, name: 'Hola 2') }
+      let!(:federation3) { create(:federation, name: 'Fed') }
+
+      it 'filters federations by name' do
+        get "/federations?search=Hola"
+        payload = JSON.parse(response.body)
+        expect(payload).to_not be_empty
+        expect(payload.size).to eq(2)
+        expect(payload.map { |p| p["id"] }.sort).to eq([federation1.id, federation2.id].sort)
+        expect(response).to have_http_status(200)
+      end
     end
   end
 
