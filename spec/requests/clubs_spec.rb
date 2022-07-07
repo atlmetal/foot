@@ -152,13 +152,15 @@ RSpec.describe "Clubs endpoint", type: :request do
   end
 
   describe "GET /club/{id}" do
-    let(:clubs) { create(:club) }
+    let(:club) { create(:club) }
 
     it 'returns a club' do
-      get "/clubs/#{clubs.id}"
+      get "/clubs/#{club.id}"
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload["id"]).to eq(clubs.id)
+      expect(payload["id"]).to eq(club.id)
+      expect(payload["name"]).to eq(club.name)
+      expect(payload["foundation_date"].to_date).to eq(club.foundation_date)
       expect(response).to have_http_status(200)
     end
   end

@@ -160,6 +160,9 @@ RSpec.describe "Player endopoint", type: :request do
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
       expect(payload["id"]).to eq(players.id)
+      expect(payload["name"]).to eq(players.name)
+      expect(payload["birth_date"].to_date).to eq(players.birth_date)
+      expect(payload["value"]).to eq(players.value)
       expect(response).to have_http_status(200)
     end
   end

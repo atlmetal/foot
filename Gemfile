@@ -79,3 +79,5 @@ gem "jquery-rails", "~> 4.5"
 gem "jquery-datatables", "~> 1.10"
 
 gem "bootstrap", "~> 4.1"
+
+gem "active_model_serializers", "~> 0.10.8"

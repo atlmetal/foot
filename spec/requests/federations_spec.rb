@@ -153,13 +153,15 @@ RSpec.describe "Federations endpoint", type: :request do
   end
 
   describe "GET /federation/{id}" do
-    let(:federations) { create(:federation) }
+    let(:federation) { create(:federation) }
 
     it 'returns a federation' do
-      get "/federations/#{federations.id}"
+      get "/federations/#{federation.id}"
       payload = JSON.parse(response.body)
       expect(payload).to_not be_empty
-      expect(payload["id"]).to eq(federations.id)
+      expect(payload["id"]).to eq(federation.id)
+      expect(payload["name"]).to eq(federation.name)
+      expect(payload["foundation_date"].to_date).to eq(federation.foundation_date)
       expect(response).to have_http_status(200)
     end
   end
