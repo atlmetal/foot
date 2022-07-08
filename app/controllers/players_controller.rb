@@ -13,10 +13,10 @@ class PlayersController < ApplicationController
   # GET /players or /players.json
   def index
     @players = Player.all
-    if !params[:search].nil? && params[:search].present?
-      @players = PlayersSearchService.search(@players, params[:search])
-    end
-    render json: @players, status: :ok
+        if !params[:search].nil? && params[:search].present?
+          @players = PlayersSearchService.search(@players, params[:search])
+        end
+    render json: @players.includes(:club), status: :ok
   end
 
   # GET /players/1 or /players/1.json

@@ -16,7 +16,7 @@ class ClubsController < ApplicationController
     if !params[:search].nil? && params[:search].present?
       @clubs = ClubsSearchService.search(@clubs, params[:search])
     end
-    render json: @clubs, status: :ok
+    render json: @clubs.includes(:federation), status: :ok
   end
 
   # GET /clubs/1 or /clubs/1.json
