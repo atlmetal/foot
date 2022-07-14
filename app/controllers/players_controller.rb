@@ -1,4 +1,6 @@
 class PlayersController < ApplicationController
+  include Secured
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
 
   rescue_from Exception do |e|
     render json: { error: e.message }, status: :internal_error
@@ -50,7 +52,7 @@ class PlayersController < ApplicationController
   # end
 
   def create
-    @player = Player.create!(create_params)
+    @player = Current.user.players.create!(create_params)
     render json: @player, status: :created
   end
 
@@ -68,7 +70,7 @@ class PlayersController < ApplicationController
   # end
 
   def update
-    @player = Player.find(params[:id])
+    @player = Current.user.players.find(params[:id])
     @player.update!(update_params)
     render json: @player, status: :ok
   end
@@ -84,17 +86,17 @@ class PlayersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_player
-      @player = Player.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_player
+    @player = Player.find(params[:id])
+  end
 
-    # Only allow a list of trusted parameters through.
-    def create_params
-      params.require(:player).permit(:name, :birth_date, :value, :club_id)
-    end
+  # Only allow a list of trusted parameters through.
+  def create_params
+    params.require(:player).permit(:name, :birth_date, :value)
+  end
 
-    def update_params
-      params.require(:player).permit(:name, :birth_date, :value)
-    end
+  def update_params
+    params.require(:player).permit(:name, :birth_date, :value)
+  end
 end
