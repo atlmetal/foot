@@ -52,6 +52,8 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker", "~> 2.21"
 end
 
 group :development do
@@ -68,8 +70,8 @@ end
 
 group :test do
   gem "factory_bot_rails"
-  gem "shoulda-matchers"
   gem "faker", "~> 2.21"
+  gem "shoulda-matchers"
   gem "database_cleaner"
 end
 
@@ -81,3 +83,5 @@ gem "jquery-datatables", "~> 1.10"
 gem "bootstrap", "~> 4.1"
 
 gem "active_model_serializers", "~> 0.10.8"
+gem "graphql", "~> 2.0"
+gem "graphiql-rails", group: :development
