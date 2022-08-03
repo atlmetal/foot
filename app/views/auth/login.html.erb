@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Football - API</title>
+</head>
+<body>
+  <script src="https://cdn.auth0.com/js/auth0/9.5.1/auth0.min.js"></script>
+  <script>
+    window.addEventListener('load', function() {
+
+      var webAuth = new auth0.WebAuth({
+        domain: 'dev-xouhogfh.us.auth0.com',
+        clientID: 'ZIZ2rnGH3iRipa3UNbksMuGbbHgUKElR',
+        responseType: 'token id_token',
+        scope: 'openid profile email',
+        redirectUri: 'https://jwt.io'
+      });
+
+      webAuth.authorize();
+    });
+  </script>
+</body>
+</html>

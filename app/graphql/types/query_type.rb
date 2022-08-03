@@ -8,10 +8,22 @@ module Types
     # They will be entry points for queries on your schema.
 
     # TODO: remove me
-    field :test_field, String, null: false,
-      description: "An example field added by the generator"
-    def test_field
-      "Hello World!"
+    field :federations, [Types::FederationType], null: false, description: 'Federations'
+
+    field :clubs, [Types::ClubType], null: false, description: 'All clubs'
+
+    field :players, [Types::PlayerType], null: false, description: "Return a list of players"
+
+    def federations
+      Federation.all
+    end
+
+    def clubs
+      Club.all
+    end
+
+    def players
+      Player.all
     end
   end
 end
