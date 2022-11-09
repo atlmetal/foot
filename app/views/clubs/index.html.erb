@@ -13,16 +13,24 @@
     </tr>
   </thead>
 
-<%# <div id="clubs"> %>
-  <%# <% @clubs.each do |club| %>
-    <%# <%= render club %>
-    <%# <p> %>
-      <%# <%= link_to "Show this club", club %>
-    <%# </p> %>
-  <%# <% end %>
-<%# </div> %>
+<section id="simple">
+  <h2>Simple Example</h2>
+  <div class="row">
+    <div class="span6">
+      <h3>Without Select2</h3>
+      <form>
+        <%= select_tag "clubs", options_from_collection_for_select(@clubs, "id", "name") %>
+      </form>
 
-<%# <%= link_to "New club", new_club_path %>
+    </div>
+    <div class="span6">
+      <h3>With Select2</h3>
+      <form>
+        <%= select_tag "clubs", options_from_collection_for_select(@clubs, "id", "name"), id: "js-example-basic-multiple" %>
+      </form>
+    </div>
+  </div>
+</section>
 
   <tbody>
     <% @clubs.each do |club| %>
@@ -41,8 +49,16 @@
 <%= link_to 'New club', new_club_path %>
 
 <%# <script src="https://code.jquery.com/jquery-3.3.1.js"></script> %>
-<script>
+<%# <script>
   $(document).ready(function() {
     var oTable = $("#ordersTable").DataTable({})
   });
-</script>
+</script> %>
+
+<% content_for :js do %>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $('select#js-example-basic-multiple').select2();
+  });
+  </script>
+<% end %>

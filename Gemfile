@@ -86,3 +86,4 @@ gem "active_model_serializers", "~> 0.10.8"
 gem "graphql", "~> 2.0"
 gem "graphiql-rails", group: :development
 gem 'jwt'
+gem 'select2-rails'
